@@ -1,3 +1,3 @@
 # HandwrittenRecognization
 
-Recogize handwritten digits
+Recognize handwritten digits
