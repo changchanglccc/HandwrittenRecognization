@@ -1,5 +1,6 @@
 import struct
-import os
+# import numpy as np
+# import matplotlib.pyplot as plt
 
 TRAINING_PERCENTAGE = 60
 VALIDATION_PERCENTAGE = 20
@@ -14,7 +15,7 @@ validationLabels = []
 testingLabels = []
 
 def normalizeFeatures(feature, rows, columns):
-    list(map(lambda x: 0 if x < 50 else 1, feature))   # Normalize
+    feature = list(map(lambda x: 0 if x < 100 else 1, feature))   # Normalize
     return[feature[i:i + (rows*columns)] for i in range(0, len(feature), (rows*columns))]
 
 def readData(fileName):
@@ -51,17 +52,27 @@ def readData(fileName):
     # Get Training portion
     print('Reading & Parsing Training data...')
     trainingList = img_file.read(rows * columns * numTraining)
-    normalizeFeatures(trainingList, rows, columns)
+    trainingList = normalizeFeatures(trainingList, rows, columns)
 
     # Get Validation portion
     print('Reading & Parsing Validation data...')
     validationList = img_file.read(rows * columns * numValidation)
-    normalizeFeatures(validationList, rows, columns)
+    validationList = normalizeFeatures(validationList, rows, columns)
 
     # Get Testing portion
     print('Reading & Parsing Testing data...')
     testingList = img_file.read(rows * columns * numTesting)
-    normalizeFeatures(testingList, rows, columns)
+    testingList = normalizeFeatures(testingList, rows, columns)
+
+    # uncomment to see a given digit
+    # image = np.ndarray(shape=(rows,columns))
+
+    # for i in range(rows):
+    #     for j in range(columns):
+    #         image[i,j] = trainingList[1][(i*columns)+j]
+
+    # img_plot = plt.imshow(image,'Greys')
+    # plt.show()
 
     #close file
     img_file.close()
@@ -85,6 +96,9 @@ def readLabels(fileName):
     validationLabels = list(label_file.read(len(validationList)))
     # Get testing labels   
     testingLabels = list(label_file.read(len(testingList)))
+
+    # uncomment to see a given label
+    #print(trainingLabels[6])
 
     label_file.close()
 
