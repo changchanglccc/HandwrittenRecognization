@@ -1,6 +1,10 @@
 import struct
-# import numpy as np
-# import matplotlib.pyplot as plt
+import random
+import math
+import operator
+from functools import reduce
+import numpy as np
+import matplotlib.pyplot as plt
 
 TRAINING_PERCENTAGE = 60
 VALIDATION_PERCENTAGE = 20
@@ -29,7 +33,7 @@ def readData(fileName):
 
     # Get number of images
     numImages = img_file.read(4)
-    numImages = struct.unpack('>i',numImages)[0]
+    numImages = 3000#struct.unpack('>i',numImages)[0]
 
     #calculate size of training, validation and testing sets
     numTraining = int(round((numImages * (TRAINING_PERCENTAGE / 100.0)), 0))
@@ -77,6 +81,9 @@ def readData(fileName):
     #close file
     img_file.close()
 
+def update_progress(progress):
+    print('\r[{0}] {1}%'.format('#'*int((progress*30)/len(trainingList)), math.ceil(progress*100/len(trainingList))), end="", flush=True)
+
 def readLabels(fileName):
     global trainingLabels, validationLabels, testingLabels
     label_file = open(fileName,'r+b')
@@ -102,7 +109,68 @@ def readLabels(fileName):
 
     label_file.close()
 
+def updateMeans(means, clusters):
+    if(len(clusters) == 0):
+        return
+    meanCentroid = [[0.0]*784]*10
+    for point in clusters:
+        meanCentroid[point[1]] = map(lambda x: reduce(sum, x) % 2, zip(point[0], meanCentroid))
+
+def getBestDistanceCluster(means, score):
+    minDist = 100000.0
+    bestIndex = -1
+    for i, mean in enumerate(means):
+        dist = math.sqrt(reduce(lambda x, y: x + y, map(lambda val: math.pow(reduce(lambda x, y: x-y, val), 2),zip(score, mean[1]))))
+        if(minDist > dist):
+            minDist = dist
+            bestIndex = i
+    return bestIndex
+
+def k_means():
+    # randomly select mean for each digit class
+    means = []
+    for i in range(10):
+        digitsForClass = list(filter(lambda x: x[0] == i, trainingList))
+        means.append(list(digitsForClass[random.randint(0, len(digitsForClass)-1)]))
+    clusters = []
+    rep = False
+    change = True
+    o = 0
+    while change:
+        o += 1
+        print(o)
+        change = False
+        updateMeans(means, clusters)
+        for i, feat in enumerate(trainingList):
+            clusterChosen = getBestDistanceCluster(means, feat[1])
+            if not rep:
+                clusters.append([feat[1], clusterChosen])
+                change = True
+            elif clusters[i][1] != clusterChosen:
+                clusters[i][1] = clusterChosen
+                change = True
+            update_progress(i)
+        rep = True
+    # plot graph
+    # uncomment to see a given digit
+    image = np.ndarray(shape=(rows,columns))
+
+    for i in range(28):
+        for j in range(28):
+            image[i,j] = means[0][(i*columns)+j]
+
+    img_plot = plt.imshow(image,'Greys')
+    plt.show()
+    
+
+def labelAndSort():
+    global trainingList
+    trainingList = sorted(zip(trainingLabels, trainingList), key=(lambda x: x[0]))
+
 
 if __name__ == '__main__':
     readData('data/mnist-train')
     readLabels('data/mnist-train-labels')
+    # Label and order
+    labelAndSort()
+    k_means()
