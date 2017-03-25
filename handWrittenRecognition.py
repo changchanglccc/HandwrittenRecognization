@@ -33,7 +33,7 @@ def readData(fileName):
 
     # Get number of images
     numImages = img_file.read(4)
-    numImages = 3000#struct.unpack('>i',numImages)[0]
+    numImages = 50000#struct.unpack('>i',numImages)[0]
 
     #calculate size of training, validation and testing sets
     numTraining = int(round((numImages * (TRAINING_PERCENTAGE / 100.0)), 0))
@@ -69,14 +69,14 @@ def readData(fileName):
     testingList = normalizeFeatures(testingList, rows, columns)
 
     # uncomment to see a given digit
-    # image = np.ndarray(shape=(rows,columns))
+    image = np.ndarray(shape=(rows,columns))
 
-    # for i in range(rows):
-    #     for j in range(columns):
-    #         image[i,j] = trainingList[1][(i*columns)+j]
+    for i in range(rows):
+        for j in range(columns):
+            image[i,j] = trainingList[0][(i*columns)+j]
 
-    # img_plot = plt.imshow(image,'Greys')
-    # plt.show()
+    img_plot = plt.imshow(image,'Greys')
+    plt.show()
 
     #close file
     img_file.close()
@@ -153,11 +153,12 @@ def k_means():
         rep = True
     # plot graph
     # uncomment to see a given digit
-    image = np.ndarray(shape=(rows,columns))
+    image = np.ndarray(shape=(28,28))
+    print(means)
 
     for i in range(28):
         for j in range(28):
-            image[i,j] = means[0][(i*columns)+j]
+            image[i,j] = means[5][1][(i*28)+j]
 
     img_plot = plt.imshow(image,'Greys')
     plt.show()
