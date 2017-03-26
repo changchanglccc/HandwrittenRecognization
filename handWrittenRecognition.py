@@ -24,7 +24,7 @@ testingLabels = []
 
 # Normalize features to a list
 def normalizeFeatures(feature, rows, columns):
-    feature = list(feature)#map(lambda x: 0 if x < 100 else 1, feature))   # Normalize
+    feature = list(map(lambda x: 0 if x < 10 else 1, feature))   # Normalize
     return[feature[i:i + (rows*columns)] for i in range(0, len(feature), (rows*columns))]
 
 # Reads MNIST File and convert it to a List
@@ -42,7 +42,7 @@ def readData(fileName):
     # For using the 60,000 digits
     #numImages = struct.unpack('>i',numImages)[0]
     # For an arbritary amount of data
-    numImages = 3000
+    numImages = 10000
 
     #calculate size of training, validation and testing sets
     numTraining = int(round((numImages * (TRAINING_PERCENTAGE / 100.0)), 0))
@@ -231,4 +231,4 @@ if __name__ == '__main__':
     readData('data/mnist-train')
     readLabels('data/mnist-train-labels')
     labeledTraining = labelDataset(trainingList, trainingLabels)
-    k_means(20, labeledTraining)
+    k_means(30, labeledTraining)
