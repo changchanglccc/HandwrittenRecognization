@@ -142,9 +142,9 @@ class MNIST_NaiveBayes():
         self.nb_testing_labels = self.run_bayes(self.testing_list)
 
         # Displays accuracy results     # Uncomment to display results
-        #self.test_accuracy('Training', self.nb_training_labels, self.training_labels)
-        #self.test_accuracy('Validation', self.nb_validation_labels, self.validation_labels)
-        #self.test_accuracy('Testing', self.nb_testing_labels, self.testing_labels)
+        self.test_accuracy('Training', self.nb_training_labels, self.training_labels)
+        self.test_accuracy('Validation', self.nb_validation_labels, self.validation_labels)
+        self.test_accuracy('Testing', self.nb_testing_labels, self.testing_labels)
 
         # The following will display all vectors where the label matches the value passed
         #self.print_number(0)
