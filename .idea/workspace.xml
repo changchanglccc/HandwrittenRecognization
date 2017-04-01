@@ -20,8 +20,8 @@
       <file leaf-file-name="handWrittenRecognition.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/handWrittenRecognition.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-38">
-              <caret line="272" column="22" lean-forward="false" selection-start-line="272" selection-start-column="22" selection-end-line="272" selection-end-column="22" />
+            <state relative-caret-position="784">
+              <caret line="301" column="0" lean-forward="true" selection-start-line="301" selection-start-column="0" selection-end-line="301" selection-end-column="0" />
               <folding>
                 <element signature="e#1#14#0" expanded="true" />
                 <element signature="e#570#732#0" expanded="false" />
@@ -364,8 +364,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/handWrittenRecognition.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-38">
-          <caret line="272" column="22" lean-forward="false" selection-start-line="272" selection-start-column="22" selection-end-line="272" selection-end-column="22" />
+        <state relative-caret-position="784">
+          <caret line="301" column="0" lean-forward="true" selection-start-line="301" selection-start-column="0" selection-end-line="301" selection-end-column="0" />
           <folding>
             <element signature="e#1#14#0" expanded="true" />
             <element signature="e#570#732#0" expanded="false" />

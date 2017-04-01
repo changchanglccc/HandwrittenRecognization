@@ -294,15 +294,8 @@ if __name__ == '__main__':
     readData('data/mnist-train')
     readLabels('data/mnist-train-labels')
     labeledTraining = labelDataset(trainingList, trainingLabels)
-    #k_means(30, labeledTraining)
-    #displayDigit(trainingList[0])
-    #print(testingList[0]) #get the matrix
-    #print(labelDataset(trainingList, trainingLabels))
-    #print(labelDataset(testingList,testingLabels)[0])
-    #for i in labeledTraining:
-    #print(labeledTraining)
     print("------------kNN classification------------")
-    calculateaccuracy(predicttestinglabel(3,testingList,trainingList),testingList)
+    calculateaccuracy(predicttestingdatalabel(3,testingList,trainingList),testingList)
 
 
 
