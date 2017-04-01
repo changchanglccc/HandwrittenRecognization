@@ -6,6 +6,7 @@ import operator
 from functools import reduce
 import numpy as np
 import matplotlib.pyplot as plt
+import datetime
 
 # Percetage of data to be used by the algorithm
 TRAINING_PERCENTAGE = 60
@@ -295,7 +296,10 @@ if __name__ == '__main__':
     readLabels('data/mnist-train-labels')
     labeledTraining = labelDataset(trainingList, trainingLabels)
     print("------------kNN classification------------")
-    calculateaccuracy(predicttestingdatalabel(3,testingList,trainingList),testingList)
-
-
-
+    k = int(input("enter k for kNN: "))
+    starttime = datetime.datetime.now() # record the time cost
+    print("start time is : ", starttime)
+    calculateaccuracy(predicttestingdatalabel(k,testingList,trainingList),testingList)
+    endtime = datetime.datetime.now()
+    print("end time is : ", endtime)
+    print("time cost: ", (endtime - starttime).seconds,"s")
