@@ -16,6 +16,7 @@ TESTING_PERCENTAGE = 20
 trainingList = []
 validationList = []
 testingList = []
+kNearstDistance=[] #record distances of k Nearest neignbour
 
 #Global List of Labels
 trainingLabels = []
@@ -225,10 +226,83 @@ def showClusteringDetails(clusters):
 #returns a label dataset
 def labelDataset(datalist, datalabels):
     return list(zip(datalabels, datalist))
+#
+
+#succeed, calculate the nearest distance,the ability of getting the nearest label
+def getkNN(k,onetestdata,trainingdata):
+    maxdict = 0
+    flag = 0
+    distancelist=[]
+    for itraining in trainingdata:
+        if flag < k:
+            distancelist.append([distance(itraining[1], onetestdata),itraining[0]]) # store[[distance,label from itraining],[]...]
+            flag = flag + 1
+            #print("if: ",distancelist)
+        else:
+            currentdict = distance(itraining[1], onetestdata)
+            distancelist.sort()
+            maxdict = distancelist[len(distancelist) - 1][0]
+            if currentdict > maxdict:
+                pass
+            else:  # note: when currendict == maxdict, we update its label
+                distancelist.remove(distancelist[len(distancelist) - 1])
+                distancelist.append([currentdict,itraining[0]])
+                distancelist.sort()
+                maxdict = distancelist[len(distancelist) - 1]
+            #print("else ", distancelist)
+        #print("in for, the distancelist is ", distancelist)
+    #print()
+    distancelist.sort()
+    #print("after all, distancelist is ", distancelist)
+    #print("the nearest label is ", distancelist[0][1])
+    return distancelist[0][1]  #return the nearest label
+
+'''
+#succeed function： get the most label, and then it can be given to the testingdata as the predictlable (discard)
+def predictlable(list):
+    dict={}
+    for i in range(len(list)):
+        if list[i][0] in dict:
+            dict[list[i][0]]= dict.get(list[i][0]) + 1
+        else:
+            dict.setdefault(list[i][0],1)
+    return sorted(dict.items(),key = lambda dict: dict[0])[0][0]
+'''
+
+#test predict testingdata
+def predicttestingdatalabel(k,list,trainingdata):
+    newlist=[]
+    for item in list:
+        newlist.append([getkNN(k,item[1],trainingdata),item[1]])
+    return newlist
+
+#succeed, calculateaccuracy
+def calculateaccuracy(list1,list2):
+    count = 0
+    if len(list1)!= len(list2):
+        print("Cannot calculate because of the imblance of data")
+    else:
+        for i in range(len(list1)):
+            if list1[i][0] == list2[i][0]:
+                count = count + 1
+            else:
+                pass
+        print(count/len(list1))
 
 
 if __name__ == '__main__':
     readData('data/mnist-train')
     readLabels('data/mnist-train-labels')
     labeledTraining = labelDataset(trainingList, trainingLabels)
-    k_means(30, labeledTraining)
+    #k_means(30, labeledTraining)
+    #displayDigit(trainingList[0])
+    #print(testingList[0]) #get the matrix
+    #print(labelDataset(trainingList, trainingLabels))
+    #print(labelDataset(testingList,testingLabels)[0])
+    #for i in labeledTraining:
+    #print(labeledTraining)
+    print("------------kNN classification------------")
+    calculateaccuracy(predicttestinglabel(3,testingList,trainingList),testingList)
+
+
+
