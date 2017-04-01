@@ -298,8 +298,6 @@ if __name__ == '__main__':
     print("------------kNN classification------------")
     k = int(input("enter k for kNN: "))
     starttime = datetime.datetime.now() # record the time cost
-    print("start time is : ", starttime)
     calculateaccuracy(predicttestingdatalabel(k,testingList,trainingList),testingList)
     endtime = datetime.datetime.now()
-    print("end time is : ", endtime)
     print("time cost: ", (endtime - starttime).seconds,"s")
