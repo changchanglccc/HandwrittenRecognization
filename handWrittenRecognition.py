@@ -226,9 +226,73 @@ def showClusteringDetails(clusters):
 def labelDataset(datalist, datalabels):
     return list(zip(datalabels, datalist))
 
+def somWinningNeuron(neurons, feat):
+    minDist = 100000000.
+    minIndex = -1
+    for i, neuron in enumerate(neurons):
+        dist = distance(neuron, feat)
+        if dist < minDist:
+            minDist = dist
+            minIndex = i
+    return i
+
+def updateWeights(neuron, feat, a):
+    for i in range(len(feat)):
+        neuron[i] = neuron[i]+ (a * (feat[i] - neuron[i]))
+
+def updateLearningCurve(a):
+    a = a / 2
+
+def labelNeurons(neurons, training):
+    labels = [{c: 0 for c in range(10)} for x in range(len(neurons))]
+    neuronLabels = []
+    for (label, feat) in training:
+        winning = somWinningNeuron(neurons, feat)
+        labels[winning][label] += 1
+    for lab in labels:
+        neuronLabels.append(max(lab, key=lambda i: lab[i]))
+    print(neuronLabels)
+    return neuronLabels
+
+def classifyDigitsSOM(neurons, neuronLabels, testing):
+    correct = 0
+    wrong = 0
+    for (label, feat) in testing:
+        winning = somWinningNeuron(neurons, feat)
+        if neuronLabels[winning] == label:
+            correct += 1
+        else:
+            wrong += 1
+    print("Correct test", (correct/len(testingList))*100,"%")
+    print("wrong Tests", (wrong/len(testingList))*100, "%")
+
+
+# Self-Organizing Maps implementation
+def somClustering(n, training, validation, testing):
+    a = 1
+    r = 0
+    print("Starting SOM Clustering with "+str(n)+ " neurons")
+    # randomly select neuron weights
+    neurons = []
+    for i in range(n*n):
+        neurons.append(random.sample(training, 1)[0][1])
+
+    for (label, feat) in training:
+        winning = somWinningNeuron(neurons, feat)
+        #update weights
+        updateWeights(neurons[winning], feat, a)
+        updateLearningCurve(a)
+
+
+    neuronLabels = labelNeurons(neurons, training)
+    classifyDigitsSOM(neurons, neuronLabels, testing)
+
 
 if __name__ == '__main__':
     readData('data/mnist-train')
     readLabels('data/mnist-train-labels')
+    #print(trainingList[0])
     labeledTraining = labelDataset(trainingList, trainingLabels)
-    k_means(30, labeledTraining)
+    labeledTesting = labelDataset(testingList, testingLabels)
+    #k_means(30, labeledTraining)
+    somClustering(4, labeledTraining, validationList, labeledTesting)
