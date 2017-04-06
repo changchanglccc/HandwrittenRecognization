@@ -295,6 +295,8 @@ if __name__ == '__main__':
     readData('data/mnist-train')
     readLabels('data/mnist-train-labels')
     labeledTraining = labelDataset(trainingList, trainingLabels)
+    #print(labeledTraining[0])
+    #displayDigit(trainingList[0])
     print("------------kNN classification------------")
     k = int(input("enter k for kNN: "))
     starttime = datetime.datetime.now() # record the time cost
