@@ -117,10 +117,10 @@ def displayDigit(digit):
     plt.show()
 
 # Shows progress of a certain operation in percentage
-#def update_progress(progress, total):
-#    print('\r[{0}] {1}%'.format('#'*int((progress*30)/total), math.ceil(progress*100/total)), end="", flush=True)
+def update_progress(progress, total):
+    print('\r[{0}] {1}%'.format('#'*int((progress*30)/total), math.ceil(progress*100/total)), end="", flush=True)
 
-#Calculates the new centroid to a cluster
+# Calculates the new centroid to a cluster
 def updateMeans(means, clusters):
     maxDist = -1
     for i, cluster in enumerate(clusters):
@@ -178,7 +178,6 @@ def labelCluster(cluster):
     return n.index(max(n))
 
 # K means clustering for digit recognition
-'''
 def k_means(k, trainingList):
     print("Starting K-Means Clustering with "+str(k)+ " clusters")
     # randomly select k centroid
@@ -214,23 +213,23 @@ def k_means(k, trainingList):
     showClusteringDetails(clusters)
     # Test against test data
     testKMeans(means, clusters)
-'''
+
 # Shows digits in each cluster class and the label trained 
-#def showClusteringDetails(clusters):
-#    print("| Ck [Label=n]| ", list(range(10)), "|")
-#    print("==================================================")
-#    for i, (label, cluster) in enumerate(clusters):
-#        print("| C"+str(i)+" [Label="+str(label)+"]| ", end="")
-#        k = [0 for c in range(10)]
-#        for (label2, digit) in cluster:
-#            k[label2] += 1
-#        print(k, " |")
-#    print("============================================")
+def showClusteringDetails(clusters):
+    print("| Ck [Label=n]| ", list(range(10)), "|")
+    print("==================================================")
+    for i, (label, cluster) in enumerate(clusters):
+        print("| C"+str(i)+" [Label="+str(label)+"]| ", end="")
+        k = [0 for c in range(10)]
+        for (label2, digit) in cluster:
+            k[label2] += 1
+        print(k, " |")
+    print("============================================")
 
 #returns a label dataset
 def labelDataset(datalist, datalabels):
     return list(zip(datalabels, datalist))
-#
+
 
 #succeed, calculate the nearest distance,the ability of getting the nearest label
 def getkNN(k,onetestdata,trainingdata):
@@ -261,18 +260,6 @@ def getkNN(k,onetestdata,trainingdata):
     #print("the nearest label is ", distancelist[0][1])
     return distancelist[0][1]  #return the nearest label
 
-
-#succeed functionget the most label, and then it can be given to the testingdata as the predictlable (discard)
-#def predictlable(list):
-#    dict={}
-#    for i in range(len(list)):
-#        if list[i][0] in dict:
-#            dict[list[i][0]]= dict.get(list[i][0]) + 1
-#        else:
-#            dict.setdefault(list[i][0],1)
-#    return sorted(dict.items(),key = lambda dict: dict[0])[0][0]
-#'''
-
 #test predict testingdata
 def predicttestinglabel(k,list,trainingdata):
     newlist=[]
@@ -295,23 +282,20 @@ def calculateaccuracy(list1,list2):
 
 
 if __name__ == '__main__':
-    #readData('data/mnist-train')
-    #readLabels('data/mnist-train-labels')
-    #labeledTraining = labelDataset(trainingList, trainingLabels)
-    #k_means(30, labeledTraining)
-    #displayDigit(trainingList[0])
+    readData('data/mnist-train')
+    readLabels('data/mnist-train-labels')
+    labeledTraining = labelDataset(trainingList, trainingLabels)
+    k_means(30, labeledTraining)
+    displayDigit(trainingList[0])
+    print("------------kNN classification------------   python3.5")
+    k = int(input("enter k for kNN: "))
+    starttime = datetime.datetime.now()  # record the time cost
+    calculateaccuracy(predicttestingdatalabel(k, testingList, trainingList), testingList)
+    endtime = datetime.datetime.now()
+    print("time cost: ", (endtime - starttime).seconds, "s")
 
-    #'''
-    #print("------------kNN classification------------")
-    #starttime = int(1000 * time.time())
-    #k = int(input("enter k for kNN: "))
-    #calculateaccuracy(predicttestinglabel(k,testingList,trainingList),testingList)
-    #print("time cost: ", int(1000 * time.time()) - starttime)
-    #print()
-    #'''
-    training_data, validation_data, test_data = mnist_loader.load_data_wrapper()
-    net = neuralNetwork1.Network([784, 30, 10])
-    net.SGD(training_data, 30, 10, 3.0, test_data=test_data)
-#
+
+
+
 
 

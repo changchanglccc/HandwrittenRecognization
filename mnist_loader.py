@@ -1,3 +1,5 @@
+# Reference : http://neuralnetworksanddeeplearning.com/chap1.html
+
 """
 mnist_loader
 ~~~~~~~~~~~~
@@ -66,7 +68,10 @@ def load_data_wrapper():
     the training data and the validation / test data.  These formats
     turn out to be the most convenient for use in our neural network
     code."""
-    tr_d, va_d, te_d = load_data()
+    tr_d, va_d, te_d = load_data()  #struction of tr_d : ([lists of matrix],[list of labels])
+   # print tr_d[0]
+   # print tr_d[1]
+
     training_inputs = [np.reshape(x, (784, 1)) for x in tr_d[0]]
     training_results = [vectorized_result(y) for y in tr_d[1]]
     training_data = zip(training_inputs, training_results)
@@ -85,4 +90,5 @@ def vectorized_result(j):
     e[j] = 1.0
     return e
 
-# understand the format of train and test data, then try the code
+
+# Reference : http://neuralnetworksanddeeplearning.com/chap1.html
