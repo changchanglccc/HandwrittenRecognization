@@ -6,7 +6,9 @@ import operator
 from functools import reduce
 import numpy as np
 import matplotlib.pyplot as plt
-import datetime
+import time
+import neuralNetwork1
+import mnist_loader
 
 # Percetage of data to be used by the algorithm
 TRAINING_PERCENTAGE = 60
@@ -201,7 +203,7 @@ def k_means(k, trainingList):
             clusterChosen = getBestDistanceCluster(means, feat)
             # Assign to that cluster
             clusters[clusterChosen].append((label, feat))
-            update_progress(i, len(trainingList))
+            #update_progress(i, len(trainingList))
         rep = True
         print(" -> max distance moved = "+ str(meanDistChange)+ ", threshold = "+str(minMeanChange))
     # Assign Labels to clusters
@@ -227,7 +229,7 @@ def showClusteringDetails(clusters):
 #returns a label dataset
 def labelDataset(datalist, datalabels):
     return list(zip(datalabels, datalist))
-#
+
 
 #succeed, calculate the nearest distance,the ability of getting the nearest label
 def getkNN(k,onetestdata,trainingdata):
@@ -258,20 +260,8 @@ def getkNN(k,onetestdata,trainingdata):
     #print("the nearest label is ", distancelist[0][1])
     return distancelist[0][1]  #return the nearest label
 
-'''
-#succeed function： get the most label, and then it can be given to the testingdata as the predictlable (discard)
-def predictlable(list):
-    dict={}
-    for i in range(len(list)):
-        if list[i][0] in dict:
-            dict[list[i][0]]= dict.get(list[i][0]) + 1
-        else:
-            dict.setdefault(list[i][0],1)
-    return sorted(dict.items(),key = lambda dict: dict[0])[0][0]
-'''
-
 #test predict testingdata
-def predicttestingdatalabel(k,list,trainingdata):
+def predicttestinglabel(k,list,trainingdata):
     newlist=[]
     for item in list:
         newlist.append([getkNN(k,item[1],trainingdata),item[1]])
@@ -288,16 +278,24 @@ def calculateaccuracy(list1,list2):
                 count = count + 1
             else:
                 pass
-        print(count/len(list1))
+        return count/len(list1)
 
 
 if __name__ == '__main__':
     readData('data/mnist-train')
     readLabels('data/mnist-train-labels')
     labeledTraining = labelDataset(trainingList, trainingLabels)
-    print("------------kNN classification------------")
+    k_means(30, labeledTraining)
+    displayDigit(trainingList[0])
+    print("------------kNN classification------------   python3.5")
     k = int(input("enter k for kNN: "))
-    starttime = datetime.datetime.now() # record the time cost
-    calculateaccuracy(predicttestingdatalabel(k,testingList,trainingList),testingList)
+    starttime = datetime.datetime.now()  # record the time cost
+    calculateaccuracy(predicttestingdatalabel(k, testingList, trainingList), testingList)
     endtime = datetime.datetime.now()
-    print("time cost: ", (endtime - starttime).seconds,"s")
+    print("time cost: ", (endtime - starttime).seconds, "s")
+
+
+
+
+
+
