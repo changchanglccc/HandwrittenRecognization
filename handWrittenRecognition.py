@@ -25,7 +25,9 @@ testingLabels = []
 # Normalize features to a list
 def normalizeFeatures(feature, rows, columns):
     feature = list(map(lambda x: 0 if x < 10 else 1, feature))   # Normalize
-    return[feature[i:i + (rows*columns)] for i in range(0, len(feature), (rows*columns))]
+    data = [feature[i:i + (rows*columns)] for i in range(0, len(feature), (rows*columns))]
+
+    return data
 
 # Reads MNIST File and convert it to a List
 def readData(fileName):
@@ -234,11 +236,13 @@ def somWinningNeuron(neurons, feat):
         if dist < minDist:
             minDist = dist
             minIndex = i
-    return i
+    return minIndex
 
 def updateWeights(neuron, feat, a):
     for i in range(len(feat)):
         neuron[i] = neuron[i]+ (a * (feat[i] - neuron[i]))
+
+    #neuron = list(map(lambda x: x[0]+ (a * (x[1] - x[0])), list(zip(neuron, feat))))
 
 def updateLearningCurve(a):
     a = a / 2
@@ -246,12 +250,12 @@ def updateLearningCurve(a):
 def labelNeurons(neurons, training):
     labels = [{c: 0 for c in range(10)} for x in range(len(neurons))]
     neuronLabels = []
-    for (label, feat) in training:
+    for i, (label, feat) in enumerate(training):
         winning = somWinningNeuron(neurons, feat)
         labels[winning][label] += 1
+        update_progress(i, len(training))
     for lab in labels:
         neuronLabels.append(max(lab, key=lambda i: lab[i]))
-    print(neuronLabels)
     return neuronLabels
 
 def classifyDigitsSOM(neurons, neuronLabels, testing):
@@ -263,28 +267,32 @@ def classifyDigitsSOM(neurons, neuronLabels, testing):
             correct += 1
         else:
             wrong += 1
-    print("Correct test", (correct/len(testingList))*100,"%")
-    print("wrong Tests", (wrong/len(testingList))*100, "%")
+    print("Correct test", (correct/len(testing))*100,"%")
+    print("wrong Tests", (wrong/len(testing))*100, "%")
 
 
 # Self-Organizing Maps implementation
 def somClustering(n, training, validation, testing):
-    a = 1
+    a = 0.1
     r = 0
-    print("Starting SOM Clustering with "+str(n)+ " neurons")
+    print("Starting SOM Clustering with "+str(n)+ "*"+str(n)+" neuron grid")
     # randomly select neuron weights
     neurons = []
     for i in range(n*n):
-        neurons.append(random.sample(training, 1)[0][1])
+        neuron = random.sample(training, 1)[0][1]
+        neurons.append(neuron)
 
-    for (label, feat) in training:
+
+    for i, (label, feat) in enumerate(training):
         winning = somWinningNeuron(neurons, feat)
         #update weights
         updateWeights(neurons[winning], feat, a)
         updateLearningCurve(a)
+        update_progress(i, len(training))
 
-
+    print("\nAssigning labels to clusters")
     neuronLabels = labelNeurons(neurons, training)
+    print("Testing")
     classifyDigitsSOM(neurons, neuronLabels, testing)
 
 
@@ -294,5 +302,5 @@ if __name__ == '__main__':
     #print(trainingList[0])
     labeledTraining = labelDataset(trainingList, trainingLabels)
     labeledTesting = labelDataset(testingList, testingLabels)
-    #k_means(30, labeledTraining)
-    somClustering(4, labeledTraining, validationList, labeledTesting)
+    k_means(30, labeledTraining)
+    somClustering(8, labeledTraining, validationList, labeledTesting)
