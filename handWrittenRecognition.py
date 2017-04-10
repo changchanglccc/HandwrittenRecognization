@@ -29,7 +29,9 @@ testingLabels = []
 # Normalize features to a list
 def normalizeFeatures(feature, rows, columns):
     feature = list(map(lambda x: 0 if x < 10 else 1, feature))   # Normalize
-    return[feature[i:i + (rows*columns)] for i in range(0, len(feature), (rows*columns))]
+    data = [feature[i:i + (rows*columns)] for i in range(0, len(feature), (rows*columns))]
+
+    return data
 
 # Reads MNIST File and convert it to a List
 def readData(fileName):
@@ -230,6 +232,15 @@ def showClusteringDetails(clusters):
 def labelDataset(datalist, datalabels):
     return list(zip(datalabels, datalist))
 
+def somWinningNeuron(neurons, feat):
+    minDist = 100000000.
+    minIndex = -1
+    for i, neuron in enumerate(neurons):
+        dist = distance(neuron, feat)
+        if dist < minDist:
+            minDist = dist
+            minIndex = i
+    return minIndex
 
 #succeed, calculate the nearest distance,the ability of getting the nearest label
 def getkNN(k,onetestdata,trainingdata):
@@ -281,10 +292,70 @@ def calculateaccuracy(list1,list2):
         return count/len(list1)
 
 
+def updateWeights(neuron, feat, a):
+    for i in range(len(feat)):
+        neuron[i] = neuron[i]+ (a * (feat[i] - neuron[i]))
+
+    #neuron = list(map(lambda x: x[0]+ (a * (x[1] - x[0])), list(zip(neuron, feat))))
+
+def updateLearningCurve(a):
+    a = a / 2
+
+def labelNeurons(neurons, training):
+    labels = [{c: 0 for c in range(10)} for x in range(len(neurons))]
+    neuronLabels = []
+    for i, (label, feat) in enumerate(training):
+        winning = somWinningNeuron(neurons, feat)
+        labels[winning][label] += 1
+        update_progress(i, len(training))
+    for lab in labels:
+        neuronLabels.append(max(lab, key=lambda i: lab[i]))
+    return neuronLabels
+
+def classifyDigitsSOM(neurons, neuronLabels, testing):
+    correct = 0
+    wrong = 0
+    for (label, feat) in testing:
+        winning = somWinningNeuron(neurons, feat)
+        if neuronLabels[winning] == label:
+            correct += 1
+        else:
+            wrong += 1
+    print("Correct test", (correct/len(testing))*100,"%")
+    print("wrong Tests", (wrong/len(testing))*100, "%")
+
+
+# Self-Organizing Maps implementation
+def somClustering(n, training, validation, testing):
+    a = 0.1
+    r = 0
+    print("Starting SOM Clustering with "+str(n)+ "*"+str(n)+" neuron grid")
+    # randomly select neuron weights
+    neurons = []
+    for i in range(n*n):
+        neuron = random.sample(training, 1)[0][1]
+        neurons.append(neuron)
+
+
+    for i, (label, feat) in enumerate(training):
+        winning = somWinningNeuron(neurons, feat)
+        #update weights
+        updateWeights(neurons[winning], feat, a)
+        updateLearningCurve(a)
+        update_progress(i, len(training))
+
+    print("\nAssigning labels to clusters")
+    neuronLabels = labelNeurons(neurons, training)
+    print("Testing")
+    classifyDigitsSOM(neurons, neuronLabels, testing)
+
+
 if __name__ == '__main__':
     readData('data/mnist-train')
     readLabels('data/mnist-train-labels')
+    #print(trainingList[0])
     labeledTraining = labelDataset(trainingList, trainingLabels)
+    labeledTesting = labelDataset(testingList, testingLabels)
     k_means(30, labeledTraining)
     displayDigit(trainingList[0])
     print("------------kNN classification------------   python3.5")
@@ -293,6 +364,7 @@ if __name__ == '__main__':
     calculateaccuracy(predicttestingdatalabel(k, testingList, trainingList), testingList)
     endtime = datetime.datetime.now()
     print("time cost: ", (endtime - starttime).seconds, "s")
+    somClustering(8, labeledTraining, validationList, labeledTesting)
 
 
 
