@@ -4,6 +4,8 @@ import random
 import math
 import operator
 from functools import reduce
+
+import datetime
 import numpy as np
 import matplotlib.pyplot as plt
 import time
@@ -242,12 +244,12 @@ def somWinningNeuron(neurons, feat):
             minIndex = i
     return minIndex
 
-#succeed, calculate the nearest distance,the ability of getting the nearest label
-def getkNN(k,onetestdata,trainingdata):
+#succeed, calculate the nearest distance,the ability of getting the k nearest label
+def getkNN(k,onetestdata,labeledtrainingdata):
     maxdict = 0
     flag = 0
     distancelist=[]
-    for itraining in trainingdata:
+    for itraining in labeledtrainingdata:
         if flag < k:
             distancelist.append([distance(itraining[1], onetestdata),itraining[0]]) # store[[distance,label from itraining],[]...]
             flag = flag + 1
@@ -263,19 +265,43 @@ def getkNN(k,onetestdata,trainingdata):
                 distancelist.append([currentdict,itraining[0]])
                 distancelist.sort()
                 maxdict = distancelist[len(distancelist) - 1]
-            #print("else ", distancelist)
-        #print("in for, the distancelist is ", distancelist)
-    #print()
     distancelist.sort()
-    #print("after all, distancelist is ", distancelist)
-    #print("the nearest label is ", distancelist[0][1])
-    return distancelist[0][1]  #return the nearest label
+    ################return(distancelist)
+    countdic = {}  # key: label name, value: showing times
+    flag = 0  # count how many labels just shows more than one time
+    for record in distancelist:
+        if record[1] not in countdic:
+            countdic[record[1]] = 1
 
-#test predict testingdata
-def predicttestinglabel(k,list,trainingdata):
-    newlist=[]
-    for item in list:
-        newlist.append([getkNN(k,item[1],trainingdata),item[1]])
+        else:
+            flag = flag + 1
+            countdic[record[1]] = countdic[record[1]] + 1
+    #print("countdic is : ", countdic)
+    s = [(k, countdic[k]) for k in sorted(countdic, key=countdic.get,
+                                          reverse=True)]  # have sorted[(labelname1, countnum),(labelname1, countnum),...]
+    if (flag == 0):
+        return distancelist[0][1]
+        # distancelist @@@@@@@@： [[2.8284271247461903, 3], [4.2426406871192848, 2], [4.2426406871192848, 8]],
+        # countdic is :  {8: 1, 2: 1, 3: 1}
+        # so, return the label of nearest one
+    else:
+        return s[0][0]
+        # distancelist @ @ @ @ @ @ @ @： [[0.0, 0], [1.7320508075688772, 19], [1.7320508075688772, 19]]
+        # countdic is: {0: 1, 19: 2}
+        # so return the one who shows most times
+
+# find the most label from k nearesr neighbours (useless now, coz it has been merged into getKNN function)
+#########
+
+# use newlist to store each predict label
+def predictlabels(k,testinglist):
+    newlist = []
+    for i in testinglist:
+        #predicLabel = findMostLabel(getkNN(k,i,labeledTraining))
+        predictLabel = getkNN(k,i,labeledTraining)
+        newlist.append(predictLabel)
+    #print()
+    print("new list is:MMMM   ", newlist)
     return newlist
 
 #succeed, calculateaccuracy
@@ -289,7 +315,7 @@ def calculateaccuracy(list1,list2):
                 count = count + 1
             else:
                 pass
-        return count/len(list1)
+        return count/len(list2)
 
 
 def updateWeights(neuron, feat, a):
@@ -358,10 +384,11 @@ if __name__ == '__main__':
     labeledTesting = labelDataset(testingList, testingLabels)
     k_means(30, labeledTraining)
     displayDigit(trainingList[0])
-    print("------------kNN classification------------   python3.5")
+    print("------------kNN classification------------")
+    starttime = datetime.datetime.now()
     k = int(input("enter k for kNN: "))
-    starttime = datetime.datetime.now()  # record the time cost
-    calculateaccuracy(predicttestingdatalabel(k, testingList, trainingList), testingList)
+    print("Accurancy is : ", calculateaccuracy(predictlabels(k, testingList), testingLabels))
+    print("testing labels : ", testingLabels)
     endtime = datetime.datetime.now()
     print("time cost: ", (endtime - starttime).seconds, "s")
     somClustering(8, labeledTraining, validationList, labeledTesting)
