@@ -1,5 +1,6 @@
 
 import struct
+import sys
 import random
 import math
 import operator
@@ -9,7 +10,8 @@ import datetime
 import numpy as np
 import matplotlib.pyplot as plt
 import time
-import neuralNetwork1
+import datetime
+#import neuralNetwork1
 import mnist_loader
 
 # Percetage of data to be used by the algorithm
@@ -29,14 +31,33 @@ validationLabels = []
 testingLabels = []
 
 # Normalize features to a list
-def normalizeFeatures(feature, rows, columns):
+def normalizeFeatures(feature, rows, columns, option):
     feature = list(map(lambda x: 0 if x < 10 else 1, feature))   # Normalize
+
     data = [feature[i:i + (rows*columns)] for i in range(0, len(feature), (rows*columns))]
+
+    if(option == 'pixelsPerRow'):
+        data = pixelsPerRowFeatExtraction(data)
 
     return data
 
+def pixelsPerRowFeatExtraction(data):
+    totalData =[]
+    rowData = []
+    row = 0
+    for d in data:
+        rowData = []
+        for i in range(28):
+            row = 0
+            for j in range(28):
+                if(d[i*28 + j] == 1):
+                    row += 1
+            rowData.append(row)
+        totalData.append(rowData)
+    return totalData
+
 # Reads MNIST File and convert it to a List
-def readData(fileName):
+def readData(fileName, featExt):
     global trainingList, validationList, testingList
     img_file = open(fileName, 'r+b')
     # Go to beginning of file
@@ -73,17 +94,17 @@ def readData(fileName):
     # Get Training portion
     print('Reading & Parsing Training data...')
     trainingList = img_file.read(rows * columns * numTraining)
-    trainingList = normalizeFeatures(trainingList, rows, columns)
+    trainingList = normalizeFeatures(trainingList, rows, columns, featExt)
 
     # Get Validation portion
     print('Reading & Parsing Validation data...')
     validationList = img_file.read(rows * columns * numValidation)
-    validationList = normalizeFeatures(validationList, rows, columns)
+    validationList = normalizeFeatures(validationList, rows, columns, featExt)
 
     # Get Testing portion
     print('Reading & Parsing Testing data...')
     testingList = img_file.read(rows * columns * numTesting)
-    testingList = normalizeFeatures(testingList, rows, columns)
+    testingList = normalizeFeatures(testingList, rows, columns, featExt)
 
     #close file
     img_file.close()
@@ -129,7 +150,7 @@ def updateMeans(means, clusters):
     maxDist = -1
     for i, cluster in enumerate(clusters):
         # create empty centroid
-        newCentroid = [0.0]*784
+        newCentroid = [0.0]*len(means[0])
         # Calculate center point by adding everything and diving by the number of digits
         for (label, digit) in cluster:
             newCentroid = list(np.array(newCentroid) + np.array(digit))
@@ -207,7 +228,7 @@ def k_means(k, trainingList):
             clusterChosen = getBestDistanceCluster(means, feat)
             # Assign to that cluster
             clusters[clusterChosen].append((label, feat))
-            #update_progress(i, len(trainingList))
+            update_progress(i, len(trainingList))
         rep = True
         print(" -> max distance moved = "+ str(meanDistChange)+ ", threshold = "+str(minMeanChange))
     # Assign Labels to clusters
@@ -377,15 +398,17 @@ def somClustering(n, training, validation, testing):
 
 
 if __name__ == '__main__':
-    readData('data/mnist-train')
+    featExtArg = ''
+    if(len(sys.argv) > 1):
+        featExtArg = str(sys.argv[1])
+    readData('data/mnist-train', featExtArg)
     readLabels('data/mnist-train-labels')
     #print(trainingList[0])
     labeledTraining = labelDataset(trainingList, trainingLabels)
     labeledTesting = labelDataset(testingList, testingLabels)
     k_means(30, labeledTraining)
-    displayDigit(trainingList[0])
-    print("------------kNN classification------------")
     starttime = datetime.datetime.now()
+    print("------------kNN classification------------")
     k = int(input("enter k for kNN: "))
     print("Accurancy is : ", calculateaccuracy(predictlabels(k, testingList), testingLabels))
     print("testing labels : ", testingLabels)
