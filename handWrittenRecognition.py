@@ -7,8 +7,6 @@ from functools import reduce
 import numpy as np
 import matplotlib.pyplot as plt
 import datetime
-import neuralNetwork1
-import mnist_loader
 
 # Percetage of data to be used by the algorithm
 TRAINING_PERCENTAGE = 60
@@ -257,39 +255,6 @@ def getkNN(k,onetestdata,trainingdata):
                 maxdict = distancelist[len(distancelist) - 1]
     distancelist.sort()
     return distancelist[0][1]  #return the nearest label
-'''
-#succeed, calculate the nearest distance,the ability of getting the nearest label
-def getkNN(k,onetestdata,trainingdata):
-    maxdict = 0
-    flag = 0
-    distancelist=[]
-    for itraining in trainingdata:
-        if flag < k:
-            distancelist.append([distance(itraining[1], onetestdata),itraining[0]]) # store[[distance,label from itraining],[]...]
-            flag = flag + 1
-            #print("if: ",distancelist)
-        else:
-            currentdict = distance(itraining[1], onetestdata)
-            distancelist.sort()
-            maxdict = distancelist[len(distancelist) - 1][0]
-            if currentdict > maxdict:
-                pass
-            else:  # note: when currendict == maxdict, we update its label
-                distancelist.remove(distancelist[len(distancelist) - 1])
-                distancelist.append([currentdict,itraining[0]])
-                distancelist.sort()
-                maxdict = distancelist[len(distancelist) - 1]
-            #print("else ", distancelist)
-        #print("in for, the distancelist is ", distancelist)
-    #print()
-    distancelist.sort()
-    #print("after all, distancelist is ", distancelist)
-    #print("the nearest label is ", distancelist[0][1])
-    return distancelist[0][1]  #return the nearest label
-
-'''
-
-
 
 
 #test predict testingdata

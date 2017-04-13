@@ -69,7 +69,7 @@ xTest,yTest = dataTest['input'],dataTest['target']
 #step3
 # trainner use BP algorithm
 verbose = True
-trainer = BackpropTrainer(fnn, dataTrain, verbose = True, learningrate = 0.05,lrdecay= 1, momentum=0)#0.1
+trainer = BackpropTrainer(fnn, dataTrain, verbose = True, learningrate = 0.1,lrdecay= 1, momentum=0)
 # maxEpochs : 1000
 trainer.trainUntilConvergence(DS,maxEpochs=10)
 #trainer.trainEpochs(epochs=100,)
@@ -80,8 +80,8 @@ NetworkWriter.writeToFile(fnn,'networkClassifier.txt')
 print("#############")
 out = fnn.activateOnDataset(DS)
 print(out)
-
-fnn.activate()
+# u can give an input, and use activate function to see the result.
+#fnn.activate(input)
 '''
 #tutorial using Recurrent Networks
 fnn = RecurrentNetwork()
