@@ -1,3 +1,5 @@
+import copy
+import time
 import math
 import struct
 
@@ -25,6 +27,7 @@ class MNIST_Processing():
     testing_list = []
 
     training_labels = []
+    training_labels_vector = []
     validation_labels = []
     testing_labels = []
 
@@ -32,6 +35,17 @@ class MNIST_Processing():
     def __init__(self):
         self.read_data()
         self.read_labels()
+        self.adapt_labels()
+
+
+    def adapt_labels(self):
+        label_list = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+        for value in self.training_labels:
+            label_list[value] = 1
+
+            self.training_labels_vector.append(list(label_list))
+            label_list[value] = 0
 
     # This retrieves and stores a list of vectors for the training, validation and testing list
     def read_data(self):
@@ -130,25 +144,200 @@ class MNIST_NaiveBayes():
     nb_validation_labels = []
     nb_testing_labels = []
 
+    collected_training_list = []
+    collected_validation_list = []
+    collected_testing_list = []
+
+
     #
     def __init__(self):
         # Initializes and prepares necessary components to run Bayes
         self.__initNB()
-        self.train_bayes()
+        start_train = time.process_time()
+        self.train_bayes_v1()
+        stop_train = time.process_time() - start_train
 
+        self.display_stats()
         # The following runs the Bayes algoritm and records the predictions
+        start_test = time.process_time()
         self.nb_training_labels = self.run_bayes(self.training_list)
         self.nb_validation_labels = self.run_bayes(self.validation_list)
         self.nb_testing_labels = self.run_bayes(self.testing_list)
+        stop_test = time.process_time() - start_test
 
         # Displays accuracy results     # Uncomment to display results
         self.test_accuracy('Training', self.nb_training_labels, self.training_labels)
         self.test_accuracy('Validation', self.nb_validation_labels, self.validation_labels)
         self.test_accuracy('Testing', self.nb_testing_labels, self.testing_labels)
 
+        print('Training phase took: {0}'.format(stop_train))
+        print('Testing phase took: {0}'.format(stop_test))
         # The following will display all vectors where the label matches the value passed
-        #self.print_number(0)
+        #self.print_number(3)
 
+    #
+    def display_stats(self):
+        if self.pixel_prob and self.class_prob:
+            for index in range(len(self.class_prob)):
+                print('Probability of class {0}: {1}'.format(index, self.class_prob[index]))
+
+            print()
+
+            """
+            for class_index in range(len(self.pixel_prob)):
+                print('Class {0} contains the following pixel probability:'.format(class_index))
+
+                output_string = ''
+
+                for index in range(len(self.pixel_prob[class_index])):
+                    output_string += '{:.6f} '.format((self.pixel_prob[class_index][index] * 100))
+
+                    if index % 28 == 0:
+                        print(output_string)
+                        output_string = ''
+            """
+    ### END OF display_stats() ###
+
+    # The following will remove empty columns from each vector and tabulate
+    #   the different sizes generated. An empty column in this domain is
+    #   defined as a full column height of consecutive non-black pixels who belong to
+    #   a unique vertical line in the vector.
+    ### NOTE:   By design this method should be ran after collect_vector_height_data()
+    ###         method is ran at least once
+    def collect_vector_width_data(self):
+        if not self.collected_training_list or not self.collected_validation_list or not self.collected_testing_list:
+            print('Missing data to process, now configuring...')
+            self.collect_vector_height_data()
+
+        #
+        print('Processing vector width...')
+
+        process_list = [self.collected_training_list, self.collected_validation_list, self.collected_testing_list]
+        progress_index = 0
+
+        for list in process_list:
+            for vector in list:
+                empty_column = True
+                empty_index = []
+
+                height = int(len(vector) / 28)
+
+                new_vector = copy.deepcopy(vector)
+
+                for x in range(28):
+                    for y in range(x, len(vector), 28):
+                        if new_vector[y] == 1:
+                            empty_column = False
+
+                        #
+                        if y > len(vector) - 28 and empty_column == True:
+                            empty_index.insert(0, x)
+                        elif y > len(vector) - 28 and empty_column == False:
+                            empty_column = True
+
+                print(empty_index)
+
+                index_to_remove = copy.deepcopy(empty_index)
+
+                for x in empty_index:
+                    for y in range(height):
+                        if x * y not in index_to_remove:
+                            index_to_remove.append(x * y)
+
+
+                index_to_remove = sorted(index_to_remove, reverse=True)
+
+                for x in index_to_remove:
+                    width = int(math.sqrt(len(new_vector)))
+
+                    if width % 22 != 0:
+                        del new_vector[x]
+
+                print(len(new_vector))
+
+                return
+
+    # The following will remove empty rows from each vector and tabulate
+    #   the different sizes generated. An empty column in this domain is
+    #   defined as a 28 consecutive non-black pixels who belong to
+    #   a unique horizontal line in the vector.
+    def collect_vector_height_data(self):
+        # The following ensures the process does not run without data
+        if not self.training_list or not self.validation_list or not self.testing_list:
+            print('Missing data to process, now configuring...')
+            self.__initNB()
+
+        # The following creates list
+        print('Processing vector height...')
+
+        process_list = [self.training_list, self.validation_list, self.testing_list]
+        process_index = 0
+
+        for list in process_list:
+            for vector in list:
+                empty_row = True
+                empty_index = []
+
+                new_vector = copy.deepcopy(vector)
+
+                for x in range(len(new_vector)):
+                    if new_vector[x] == 1:
+                        empty_row = False
+
+                    # The following checks for empty lines above and bellow each vector
+                    if x != 0 and x % 28 == 0 and empty_row == True:
+                        empty_index.insert(0, x)
+                    elif x % 28 == 0 and empty_row == False:
+                        empty_row = True
+
+                for index in empty_index:
+                    height =  int(len(new_vector) / 28)
+
+                    if height % 22 != 0:
+                       del new_vector[index - 28: index]
+
+                if process_index == 0:
+                    self.collected_training_list.append(new_vector)
+                elif process_index == 1:
+                    self.collected_validation_list.append(new_vector)
+                elif process_index == 2:
+                    self.collected_testing_list.append(new_vector)
+
+            process_index += 1
+
+        # The following will tabulate and display the different heights of the new vectors created
+        """
+        print('Processing new vector lengths...\n')
+        collected_list = [self.collected_training_list, self.collected_validation_list, self.collected_testing_list]
+
+        collected_lengths = [0 for x in range(29)]
+
+        for list in collected_list:
+            for vector in list:
+                height = int(len(vector) / 28)
+                collected_lengths[height] += 1
+                
+                if height < 12:
+                    output = ''
+    
+                    for x in range(len(vector)):
+                        if vector[x] != 0:
+                            output += '.'
+                        else:
+                            output += '  '
+
+                        if x % 28 == 0 and x != 0:
+                            print(output)
+                            output = ''
+
+                    print()
+
+
+        for x in range(len(collected_lengths)):
+            if collected_lengths[x] != 0:
+                print("Height: " + str(x) + "\tfound: " + str(collected_lengths[x]))
+        ## """
+    ### END OF collect_vector_data() ###
 
     #
     def __initNB(self):
@@ -163,8 +352,15 @@ class MNIST_NaiveBayes():
         self.testing_labels = self.MNIST_OBJECT.testing_labels
     ### END OF __initNB() ###
 
-    #
-    def train_bayes(self):
+    # The following is an implementation of Naive Bayes proccessing a probability
+    #   for each individual pixel in an image.
+    def train_bayes_v1(self):
+        # The following ensure data is present to process
+        if not self.training_list or not self.validation_list or not self.testing_list:
+            print('Missing data to process, now configuring...')
+            self.__initNB()
+
+        #
         print('Training Naive Bayes algorithm with training list...\n')
         self.pixel_prob = [[0 for x in range(len(self.training_list))] for y in range(10)]
 
@@ -194,7 +390,7 @@ class MNIST_NaiveBayes():
 
         for x in range(len(class_occ)):
             self.class_prob[x] = float(class_occ[x] / num_occ)
-    ### END OF training_bayes() ###
+    ### END OF training_bayes_v1() ###
 
     #
     def run_bayes(self, list_to_test):
@@ -234,19 +430,19 @@ class MNIST_NaiveBayes():
 
     #
     def print_number(self, num_to_display):
-        for x in range(len(self.training_labels)):
+        for x in range(len(self.collected_training_list)):
             if self.training_labels[x] == num_to_display:
 
                 print('Index: ' + str(x))
                 output = ''
 
-                for y in range(len(self.training_list[x])):
-                    if self.training_list[x][y] == 1:
+                for y in range(len(self.collected_training_list[x])):
+                    if self.collected_training_list[x][y] == 1:
                         output += str(num_to_display)
                     else:
-                        output += ' '
+                        output += '-'
 
-                    if y % 28 == 0:
+                    if y % 28 == 0 and y != 0:
                         print(output)
                         output = ''
 
@@ -254,4 +450,5 @@ class MNIST_NaiveBayes():
     ### END OF print_number() ###
 """ END OF MNIST_NaiveBayes() CLASS """
 
-test = MNIST_NaiveBayes()
+naive_classifier = MNIST_NaiveBayes()
+
