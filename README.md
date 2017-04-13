@@ -7,14 +7,14 @@
 
 -[x] Naive Bayes
 
--[ ] SVM	
+-[x] SVM	
 
 -[x] Neural Network(python2.7)	
 
 ### Clustering------	
 -[x] Kmeans	
 
--[ ] Neuro SOM
+-[x] Neuro SOM
 
 -[x] Genetic Algorithm	
 
