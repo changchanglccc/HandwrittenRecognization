@@ -12,6 +12,7 @@ function usually called by our neural network code.
 
 #### Libraries
 # Standard library
+'''
 import pickle
 import gzip
 
@@ -69,12 +70,13 @@ def load_data_wrapper():
     turn out to be the most convenient for use in our neural network
     code."""
     tr_d, va_d, te_d = load_data()  #struction of tr_d : ([lists of matrix],[list of labels])
-   # print tr_d[0]
+   # print tr_d[0][0]
    # print tr_d[1]
 
     training_inputs = [np.reshape(x, (784, 1)) for x in tr_d[0]]
     training_results = [vectorized_result(y) for y in tr_d[1]]
     training_data = zip(training_inputs, training_results)
+    #print training_data[0]
     validation_inputs = [np.reshape(x, (784, 1)) for x in va_d[0]]
     validation_data = zip(validation_inputs, va_d[1])
     test_inputs = [np.reshape(x, (784, 1)) for x in te_d[0]]
@@ -89,6 +91,6 @@ def vectorized_result(j):
     e = np.zeros((10, 1))
     e[j] = 1.0
     return e
-
+'''
 
 # Reference : http://neuralnetworksanddeeplearning.com/chap1.html

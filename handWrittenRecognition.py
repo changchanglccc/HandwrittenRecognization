@@ -6,7 +6,7 @@ import operator
 from functools import reduce
 import numpy as np
 import matplotlib.pyplot as plt
-import time
+import datetime
 import neuralNetwork1
 import mnist_loader
 
@@ -119,6 +119,9 @@ def displayDigit(digit):
 # Shows progress of a certain operation in percentage
 def update_progress(progress, total):
     print('\r[{0}] {1}%'.format('#'*int((progress*30)/total), math.ceil(progress*100/total)), end="", flush=True)
+
+def update_progress(progress, total):
+    print('\r[{0}] {1}%'.format('#' * int((progress * 30) / total), math.ceil(progress * 100 / total)), end="", flush = True)
 
 # Calculates the new centroid to a cluster
 def updateMeans(means, clusters):
@@ -238,6 +241,30 @@ def getkNN(k,onetestdata,trainingdata):
     distancelist=[]
     for itraining in trainingdata:
         if flag < k:
+            distancelist.append([distance(itraining[1], onetestdata),itraining[0]])
+            # store[[distance,label from itraining],[]...]
+            flag = flag + 1
+        else:
+            currentdict = distance(itraining[1], onetestdata)
+            distancelist.sort()
+            maxdict = distancelist[len(distancelist) - 1][0]
+            if currentdict > maxdict:
+                pass
+            else:  # note: when currendict == maxdict, we update its label
+                distancelist.remove(distancelist[len(distancelist) - 1])
+                distancelist.append([currentdict,itraining[0]])
+                distancelist.sort()
+                maxdict = distancelist[len(distancelist) - 1]
+    distancelist.sort()
+    return distancelist[0][1]  #return the nearest label
+'''
+#succeed, calculate the nearest distance,the ability of getting the nearest label
+def getkNN(k,onetestdata,trainingdata):
+    maxdict = 0
+    flag = 0
+    distancelist=[]
+    for itraining in trainingdata:
+        if flag < k:
             distancelist.append([distance(itraining[1], onetestdata),itraining[0]]) # store[[distance,label from itraining],[]...]
             flag = flag + 1
             #print("if: ",distancelist)
@@ -259,6 +286,11 @@ def getkNN(k,onetestdata,trainingdata):
     #print("after all, distancelist is ", distancelist)
     #print("the nearest label is ", distancelist[0][1])
     return distancelist[0][1]  #return the nearest label
+
+'''
+
+
+
 
 #test predict testingdata
 def predicttestinglabel(k,list,trainingdata):
@@ -285,12 +317,12 @@ if __name__ == '__main__':
     readData('data/mnist-train')
     readLabels('data/mnist-train-labels')
     labeledTraining = labelDataset(trainingList, trainingLabels)
-    k_means(30, labeledTraining)
-    displayDigit(trainingList[0])
+    #k_means(30, labeledTraining)
+    #displayDigit(trainingList[0])
     print("------------kNN classification------------   python3.5")
     k = int(input("enter k for kNN: "))
     starttime = datetime.datetime.now()  # record the time cost
-    calculateaccuracy(predicttestingdatalabel(k, testingList, trainingList), testingList)
+    print("accuracy is ",calculateaccuracy(predicttestinglabel(k, testingList, trainingList), testingList))
     endtime = datetime.datetime.now()
     print("time cost: ", (endtime - starttime).seconds, "s")
 
