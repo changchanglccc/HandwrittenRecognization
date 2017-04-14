@@ -317,12 +317,11 @@ def getkNN(k,onetestdata,labeledtrainingdata):
 # use newlist to store each predict label
 def predictlabels(k,testinglist):
     newlist = []
-    for i in testinglist:
+    for index, i in enumerate(testinglist):
         #predicLabel = findMostLabel(getkNN(k,i,labeledTraining))
         predictLabel = getkNN(k,i,labeledTraining)
         newlist.append(predictLabel)
-    #print()
-    print("new list is:MMMM   ", newlist)
+        update_progress(index, len(testinglist))
     return newlist
 
 #succeed, calculateaccuracy
