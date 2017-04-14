@@ -20,7 +20,7 @@
 -[x] Genetic Algorithm	
 
 ### Usage---------
-- handWrittenRecognition.py: python3 handWrittenRecognition.py <<pixelsPerRow>>
+- handWrittenRecognition.py: python3 handWrittenRecognition.py (pixelsPerRow)
 
 
 
