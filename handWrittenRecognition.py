@@ -410,7 +410,6 @@ if __name__ == '__main__':
     print("------------kNN classification------------")
     k = int(input("enter k for kNN: "))
     print("Accurancy is : ", calculateaccuracy(predictlabels(k, testingList), testingLabels))
-    print("testing labels : ", testingLabels)
     endtime = datetime.datetime.now()
     print("time cost: ", (endtime - starttime).seconds, "s")
     somClustering(8, labeledTraining, validationList, labeledTesting)
