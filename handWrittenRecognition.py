@@ -311,7 +311,7 @@ def calculateaccuracy(list1,list2):
         print("Cannot calculate because of the imblance of data")
     else:
         for i in range(len(list1)):
-            if list1[i][0] == list2[i][0]:
+            if list1[i] == list2[i]:
                 count = count + 1
             else:
                 pass
