@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="67e8a639-98e5-4d2d-a145-1d35b1392e10" name="Default" comment="" />
+    <list default="true" id="67e8a639-98e5-4d2d-a145-1d35b1392e10" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/handWrittenRecognition.py" afterPath="$PROJECT_DIR$/handWrittenRecognition.py" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -15,49 +17,17 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="handWrittenRecognition.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="handWrittenRecognition.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/handWrittenRecognition.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1485">
-              <caret line="393" column="4" lean-forward="false" selection-start-line="393" selection-start-column="4" selection-end-line="393" selection-end-column="4" />
+            <state relative-caret-position="90">
+              <caret line="313" column="35" lean-forward="false" selection-start-line="313" selection-start-column="35" selection-end-line="313" selection-end-column="35" />
               <folding>
-                <element signature="e#11196#11368#0" expanded="false" />
-                <element signature="e#11454#11825#0" expanded="false" />
-                <element signature="e#11886#12214#0" expanded="false" />
-                <element signature="e#12312#12984#0" expanded="false" />
+                <element signature="e#11190#11362#0" expanded="false" />
+                <element signature="e#11448#11819#0" expanded="false" />
+                <element signature="e#11880#12208#0" expanded="false" />
+                <element signature="e#12306#12978#0" expanded="false" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MNIST_Data.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/MNIST_Data.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1065">
-              <caret line="21" column="0" lean-forward="true" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="neuralNetwork.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/neuralNetwork.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="76" column="0" lean-forward="true" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
-              <folding>
-                <element signature="e#35#92#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="neuralNetwork1.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/neuralNetwork1.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2205">
-              <caret line="151" column="3" lean-forward="false" selection-start-line="151" selection-start-column="3" selection-end-line="151" selection-end-column="3" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -85,14 +55,13 @@
         <option value="$PROJECT_DIR$/mnist_loader.py" />
         <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/neuralNetwork1.py" />
-        <option value="$PROJECT_DIR$/handWrittenRecognition.py" />
         <option value="$PROJECT_DIR$/neuralNetwork.py" />
+        <option value="$PROJECT_DIR$/handWrittenRecognition.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="508" />
-    <option name="width" value="932" />
+    <option name="width" value="1440" />
     <option name="height" value="900" />
   </component>
   <component name="ProjectView">
@@ -398,10 +367,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="508" y="0" width="932" height="900" extended-state="6" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12982832" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.084027775" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -435,10 +404,10 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#11196#11368#0" expanded="false" />
-            <element signature="e#11454#11825#0" expanded="false" />
-            <element signature="e#11886#12214#0" expanded="false" />
-            <element signature="e#12312#12984#0" expanded="false" />
+            <element signature="e#11190#11362#0" expanded="false" />
+            <element signature="e#11448#11819#0" expanded="false" />
+            <element signature="e#11880#12208#0" expanded="false" />
+            <element signature="e#12306#12978#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -456,10 +425,10 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#11196#11368#0" expanded="false" />
-            <element signature="e#11454#11825#0" expanded="false" />
-            <element signature="e#11886#12214#0" expanded="false" />
-            <element signature="e#12312#12984#0" expanded="false" />
+            <element signature="e#11190#11362#0" expanded="false" />
+            <element signature="e#11448#11819#0" expanded="false" />
+            <element signature="e#11880#12208#0" expanded="false" />
+            <element signature="e#12306#12978#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -470,10 +439,10 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#11196#11368#0" expanded="false" />
-            <element signature="e#11454#11825#0" expanded="false" />
-            <element signature="e#11886#12214#0" expanded="false" />
-            <element signature="e#12312#12984#0" expanded="false" />
+            <element signature="e#11190#11362#0" expanded="false" />
+            <element signature="e#11448#11819#0" expanded="false" />
+            <element signature="e#11880#12208#0" expanded="false" />
+            <element signature="e#12306#12978#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -492,10 +461,10 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#11196#11368#0" expanded="false" />
-            <element signature="e#11454#11825#0" expanded="false" />
-            <element signature="e#11886#12214#0" expanded="false" />
-            <element signature="e#12312#12984#0" expanded="false" />
+            <element signature="e#11190#11362#0" expanded="false" />
+            <element signature="e#11448#11819#0" expanded="false" />
+            <element signature="e#11880#12208#0" expanded="false" />
+            <element signature="e#12306#12978#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -505,10 +474,10 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#11196#11368#0" expanded="false" />
-            <element signature="e#11454#11825#0" expanded="false" />
-            <element signature="e#11886#12214#0" expanded="false" />
-            <element signature="e#12312#12984#0" expanded="false" />
+            <element signature="e#11190#11362#0" expanded="false" />
+            <element signature="e#11448#11819#0" expanded="false" />
+            <element signature="e#11880#12208#0" expanded="false" />
+            <element signature="e#12306#12978#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -518,10 +487,10 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#11196#11368#0" expanded="false" />
-            <element signature="e#11454#11825#0" expanded="false" />
-            <element signature="e#11886#12214#0" expanded="false" />
-            <element signature="e#12312#12984#0" expanded="false" />
+            <element signature="e#11190#11362#0" expanded="false" />
+            <element signature="e#11448#11819#0" expanded="false" />
+            <element signature="e#11880#12208#0" expanded="false" />
+            <element signature="e#12306#12978#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -564,15 +533,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/handWrittenRecognition.py">
+    <entry file="file://$PROJECT_DIR$/neuralNetwork.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1485">
-          <caret line="393" column="4" lean-forward="false" selection-start-line="393" selection-start-column="4" selection-end-line="393" selection-end-column="4" />
+        <state relative-caret-position="1140">
+          <caret line="76" column="0" lean-forward="true" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
           <folding>
-            <element signature="e#11196#11368#0" expanded="false" />
-            <element signature="e#11454#11825#0" expanded="false" />
-            <element signature="e#11886#12214#0" expanded="false" />
-            <element signature="e#12312#12984#0" expanded="false" />
+            <element signature="e#35#92#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -585,12 +551,15 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/neuralNetwork.py">
+    <entry file="file://$PROJECT_DIR$/handWrittenRecognition.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="76" column="0" lean-forward="true" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
+        <state relative-caret-position="90">
+          <caret line="313" column="35" lean-forward="false" selection-start-line="313" selection-start-column="35" selection-end-line="313" selection-end-column="35" />
           <folding>
-            <element signature="e#35#92#0" expanded="true" />
+            <element signature="e#11190#11362#0" expanded="false" />
+            <element signature="e#11448#11819#0" expanded="false" />
+            <element signature="e#11880#12208#0" expanded="false" />
+            <element signature="e#12306#12978#0" expanded="false" />
           </folding>
         </state>
       </provider>
