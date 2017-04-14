@@ -9,7 +9,8 @@
 
 -[x] SVM	
 
--[x] Neural Network(python2.7)	
+-[x] Neural Network(python3: neuralNetwork.py; 
+     another version(# Reference : http://neuralnetworksanddeeplearning.com/chap1.html): python2.7: neuralNetwork1)	
 
 ### Clustering------	
 -[x] Kmeans	
