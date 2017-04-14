@@ -128,9 +128,28 @@ class MNIST_Processing():
     ### END OF read_labels() ###
 
     #
-    def normalize_features(self, feature, rows, columns):
+    def normalize_features(self, feature, rows, columns,option = 'pixelsPerRow'):
         feature = list(map(lambda x: 0 if x < 100 else 1, feature))
-        return [feature[i: i + (rows * columns)] for i in range(0, len(feature), (rows * columns))]
+        data = [feature[i: i + (rows * columns)] for i in range(0, len(feature), (rows * columns))]
+        if option == 'pixelsPerRow':
+            data = self.pixelsPerRowFeatExtraction(data)
+        return data
+
+    def pixelsPerRowFeatExtraction(self,data):
+        totalData = []
+        rowData = []
+        row = 0
+        for d in data:
+            rowData = []
+            for i in range(28):
+                row = 0
+                for j in range(28):
+                    if (d[i * 28 + j] == 1):
+                        row += 1
+                rowData.append(row)
+            totalData.append(rowData)
+        return totalData
+
     ### END OF normalize_featues() ###
 """ END OF MNIST_Processing() CLASS """
 

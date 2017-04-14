@@ -22,7 +22,11 @@ traininglabels = dataObject.neural_label_set
 fnn = FeedForwardNetwork()
 
 #set three layers, input+ hidden layer+ output  28*28=784
-inLayer = LinearLayer(784,name='inLayer')
+
+# the first feature extraction
+#inLayer = LinearLayer(784,name='inLayer')
+# the second feature extraction
+inLayer = LinearLayer(28,name='inLayer')
 hiddenLayer = SigmoidLayer(30,name = 'hiddenLayer0')
 outLayer = LinearLayer(10, name = 'outLayer')
 
@@ -54,7 +58,10 @@ print("=================================================")
 #step2： construct data set
 
 # define that the input of data set is 784 demensions, output is 10 demension
-DS = SupervisedDataSet(784,10)
+# the first feature extraction
+#DS = SupervisedDataSet(784,10)
+# the first feature extraction
+DS = SupervisedDataSet(28,10)
 
 #add sample data set
 for i in range(len(traininglist)):
@@ -70,10 +77,9 @@ xTest,yTest = dataTest['input'],dataTest['target']
 #step3
 # trainner use BP algorithm
 verbose = True
-trainer = BackpropTrainer(fnn, dataTrain, verbose = True, learningrate = 0.1,lrdecay= 1, momentum=0)
-# maxEpochs : 1000
+trainer = BackpropTrainer(fnn, dataTrain, verbose = True, learningrate = 0.5,lrdecay= 0.5, momentum=0)
 trainer.trainUntilConvergence(DS,maxEpochs=10)
-#trainer.trainEpochs(epochs=100,)
+
 
 
 NetworkWriter.writeToFile(fnn,'networkClassifier.txt')
@@ -83,23 +89,6 @@ out = fnn.activateOnDataset(DS)
 print(out)
 # u can give an input, and use activate function to see the result.
 #fnn.activate(input)
-'''
-#tutorial using Recurrent Networks
-fnn = RecurrentNetwork()
-fnn.addInputModule(LinearLayer(2,name = 'in'))
-fnn.addModule(SigmoidLayer(3,name = 'hidden'))
-fnn.addOutputModule(LinearLayer(1, name = 'out'))
-fnn.addConnection(FullConnection(fnn['in'],fnn['hidden'], name = 'c1'))
-fnn.addConnection(FullConnection(fnn['hidden'],fnn['out'], name = 'c2'))
-fnn.addRecurrentConnection(FullConnection(fnn['hidden'],fnn['hidden'], name = 'c3'))
-fnn.sortModules()
-print(fnn.activate((2,2)))
-print(fnn.activate((2,2)))
-print(fnn.activate((2,2)))
-'''
-
-
-
 
 
 # Reference: http://pybrain.org/docs/tutorial/netmodcon.html#examining-a-network; https://www.zengmingxia.com/use-pybrain-to-fit-neural-networks/
