@@ -3,6 +3,7 @@ import struct
 import numpy
 import matplotlib.pyplot
 import random
+import sys
 
 # Percetage of data to be used by the algorithm
 TRAINING_PERCENTAGE = 60
@@ -23,12 +24,33 @@ testingLabels = []
 fitnessScore, couple, children, population, populationLabel = [], [], [], [], []
 
 # Normalize features to a list
-def normalizeFeatures(feature, rows, columns):
+def normalizeFeatures(feature, rows, columns, option):
     feature = list(map(lambda x: 0 if x < 10 else 1, feature))   # Normalize
-    return[feature[i:i + (rows*columns)] for i in range(0, len(feature), (rows*columns))]
+
+    data = [feature[i:i + (rows*columns)] for i in range(0, len(feature), (rows*columns))]
+
+    if(option == 'pixelsPerRow'):
+        data = pixelsPerRowFeatExtraction(data)
+
+    return data
+
+def pixelsPerRowFeatExtraction(data):
+    totalData =[]
+    rowData = []
+    row = 0
+    for d in data:
+        rowData = []
+        for i in range(28):
+            row = 0
+            for j in range(28):
+                if(d[i*28 + j] == 1):
+                    row += 1
+            rowData.append(row)
+        totalData.append(rowData)
+    return totalData
 
 # Reads MNIST File and convert it to a List
-def readData(fileName):
+def readData(fileName, featExt):
     global trainingList, validationList, testingList
     img_file = open(fileName, 'r+b')
     # Go to beginning of file
@@ -36,37 +58,47 @@ def readData(fileName):
     # Get magic number
     magic_number = img_file.read(4)
     magic_number = struct.unpack('>i', magic_number)[0]
+
     # Get number of images
     numImages = img_file.read(4)
     # For using the 60,000 digits
+    #numImages = struct.unpack('>i',numImages)[0]
     # For an arbritary amount of data
     numImages = 10000
+
     #calculate size of training, validation and testing sets
     numTraining = int(round((numImages * (TRAINING_PERCENTAGE / 100.0)), 0))
     numValidation = int(round((numImages * (VALIDATION_PERCENTAGE / 100.0)), 0))
     numTesting = int(round((numImages * (TESTING_PERCENTAGE / 100.0)), 0))
+
     print('Training Amount: ' + str(numTraining),
      '\nValidation Amount: ' +str(numValidation),
      '\nTesting Amount: ' + str(numTesting),
      '\nTotal: ' + str(numTraining+numValidation+numTesting))
+
     # Get number of rows
     rows = img_file.read(4)
     rows = struct.unpack('>i', rows)[0]
+
     # Get number of columns
     columns = img_file.read(4)
     columns = struct.unpack('>i', columns)[0]
+
     # Get Training portion
     print('Reading & Parsing Training data...')
     trainingList = img_file.read(rows * columns * numTraining)
-    trainingList = normalizeFeatures(trainingList, rows, columns)
+    trainingList = normalizeFeatures(trainingList, rows, columns, featExt)
+
     # Get Validation portion
     print('Reading & Parsing Validation data...')
     validationList = img_file.read(rows * columns * numValidation)
-    validationList = normalizeFeatures(validationList, rows, columns)
+    validationList = normalizeFeatures(validationList, rows, columns, featExt)
+
     # Get Testing portion
     print('Reading & Parsing Testing data...')
     testingList = img_file.read(rows * columns * numTesting)
-    testingList = normalizeFeatures(testingList, rows, columns)
+    testingList = normalizeFeatures(testingList, rows, columns, featExt)
+
     #close file
     img_file.close()
 
@@ -78,15 +110,18 @@ def readLabels(fileName):
     # Get magic number
     magic_number = label_file.read(4)
     magic_number = struct.unpack('>i', magic_number)[0]
+
     # Get number of labels
     numLabels = label_file.read(4)
     numLabels = struct.unpack('>i', numLabels)[0]
+
     # Get Training labels
     trainingLabels = list(label_file.read(len(trainingList)))
     # Get validation labels
     validationLabels = list(label_file.read(len(validationList)))
     # Get testing labels
     testingLabels = list(label_file.read(len(testingList)))
+
     label_file.close()
 
 #displays a digit given a 1D List of 784 pixels
@@ -212,7 +247,10 @@ def emptyLists():
     populationLabel[:] = []
 
 if __name__ == '__main__':
-    readData('data/mnist-train')
+    featExtArg = ''
+    if(len(sys.argv) > 1):
+        featExtArg = str(sys.argv[1])
+    readData('data/mnist-train', featExtArg)
     readLabels('data/mnist-train-labels')
     print("Training for Fitness Score of the number")
     fitnessList()
